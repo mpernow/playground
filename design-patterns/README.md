@@ -4,6 +4,8 @@ Code illustrating design patterns in C++.
 
 ## Factory
 
+In the `factory` directory.
+
 Sensors are created from a string key. Concrete sensor types stay private to
 the implementation and self-register with the factory at static-init time.
 
@@ -12,6 +14,8 @@ the implementation and self-register with the factory at static-init time.
 - [factory_demo.cpp](factory_demo.cpp) — factory on its own
 
 ## Observer
+
+In the `observer` directory.
 
 A hub fans `Reading`s out to subscribers. Two variants: [`SensorHub`](observer.hpp)
 holds `weak_ptr`s and prunes expired ones; `SensorHubFunctional` holds

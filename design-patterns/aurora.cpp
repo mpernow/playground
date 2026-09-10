@@ -3,8 +3,8 @@
 #include <memory>
 #include <vector>
 
-#include "factory.hpp"
-#include "observer.hpp"
+#include "factory/factory.hpp"
+#include "observer/observer.hpp"
 
 int main() {
   std::cout << std::fixed << std::setprecision(1);

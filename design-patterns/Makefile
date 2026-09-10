@@ -5,9 +5,9 @@ BINARIES := factory_demo observer_demo aurora
 
 all: $(BINARIES)
 
-factory_demo: factory_demo.cpp factory.cpp
-observer_demo: observer_demo.cpp observer.cpp
-aurora: aurora.cpp factory.cpp observer.cpp
+factory_demo: factory/factory_demo.cpp factory/factory.cpp
+observer_demo: observer/observer_demo.cpp observer/observer.cpp
+aurora: aurora.cpp factory/factory.cpp observer/observer.cpp
 
 $(BINARIES):
 	$(CXX) $(CXXFLAGS) -o $@ $^

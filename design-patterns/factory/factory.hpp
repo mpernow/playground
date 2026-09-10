@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <utility>
 
-#include "reading.hpp"
+#include "../reading.hpp"
 
 class Sensor {
 public:

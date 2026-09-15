@@ -1,12 +1,15 @@
 #include "strategy.hpp"
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 
+namespace {
 std::string format_value(double value) {
   std::ostringstream out;
   out << std::fixed << std::setprecision(1) << value;
   return out.str();
 }
+} // namespace
 
 ThresholdRule::ThresholdRule(std::string sensor_name, double threshold)
     : sensor_name_(std::move(sensor_name)), threshold_(threshold) {}
@@ -20,18 +23,18 @@ std::string ThresholdRule::describe() const {
 }
 
 RateOfChangeRule::RateOfChangeRule(std::string sensor_name, double max_delta)
-    : sensor_name_(sensor_name), max_delta_(max_delta) {}
+    : sensor_name_(std::move(sensor_name)), max_delta_(max_delta) {}
 
 bool RateOfChangeRule::triggered(const Reading &r) {
   if (r.sensor_name != sensor_name_) {
     return false;
   }
-  if (!previous_value.has_value()) {
-    previous_value = r.value;
+  if (!previous_value_.has_value()) {
+    previous_value_ = r.value;
     return false;
   }
-  double current_previous = previous_value.value();
-  previous_value = r.value;
+  double current_previous = previous_value_.value();
+  previous_value_ = r.value;
   return std::abs(current_previous - r.value) > max_delta_;
 }
 

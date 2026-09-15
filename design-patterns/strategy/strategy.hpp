@@ -1,7 +1,11 @@
+#pragma once
+
 #include "../observer/observer.hpp"
 #include "../reading.hpp"
 #include <cmath>
+#include <memory>
 #include <optional>
+#include <string>
 
 class AlertRule {
 public:
@@ -30,7 +34,7 @@ public:
 private:
   std::string sensor_name_;
   double max_delta_;
-  std::optional<double> previous_value;
+  std::optional<double> previous_value_;
 };
 
 // Use the Strategy pattern to build rule based alerters

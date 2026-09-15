@@ -41,8 +41,10 @@ consecutive readings.
 
 ## Integrated
 
-- [aurora.cpp](aurora.cpp) — factory-built sensors feeding both hubs,
-  including a `RuleBasedAlerter`
+- [aurora.cpp](aurora.cpp) — factory-built sensors feeding a `SensorHub`
+  whose alerting is Strategy-based (`RuleBasedAlerter` with `ThresholdRule`
+  and `RateOfChangeRule`); the plain `ThresholdAlerter` and the functional
+  hub are demonstrated in `observer_demo.cpp` instead
 - [reading.hpp](reading.hpp) — the `Reading` value type shared by all three
   patterns
 

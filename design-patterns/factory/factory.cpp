@@ -3,6 +3,8 @@
 #include <stdexcept>
 #include <utility>
 
+namespace design_patterns::factory {
+
 void SensorFactory::register_kind(std::string kind, Creator creator) {
   registry()[std::move(kind)] = std::move(creator);
 }
@@ -88,3 +90,5 @@ const SensorRegistrar<Co2Sensor> co2_reg{"co2"};
 const SensorRegistrar<PressureSensor> pressure_reg{"pressure"};
 
 } // namespace
+
+} // namespace design_patterns::factory

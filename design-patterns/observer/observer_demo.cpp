@@ -11,9 +11,11 @@
 int main() {
   std::cout << std::fixed << std::setprecision(1);
 
-  SensorHub hub;
-  auto dashboard = std::make_shared<ConsoleDashboard>();
-  auto alerter = std::make_shared<ThresholdAlerter>(1000.0);
+  design_patterns::observer::SensorHub hub;
+  auto dashboard =
+      std::make_shared<design_patterns::observer::ConsoleDashboard>();
+  auto alerter =
+      std::make_shared<design_patterns::observer::ThresholdAlerter>(1000.0);
   hub.subscribe(dashboard);
   hub.subscribe(alerter);
 
@@ -26,11 +28,11 @@ int main() {
   hub.publish({"co2", 1300.0, "ppm"});
 
   std::cout << "\n-- functional hub --\n";
-  SensorHubFunctional fhub;
-  fhub.subscribe([](const Reading &r) {
+  design_patterns::observer::SensorHubFunctional fhub;
+  fhub.subscribe([](const design_patterns::Reading &r) {
     std::cout << r.sensor_name << ": " << r.value << " " << r.unit << '\n';
   });
-  fhub.subscribe([](const Reading &r) {
+  fhub.subscribe([](const design_patterns::Reading &r) {
     constexpr double threshold = 1000.0;
     if (r.sensor_name == "co2" && r.value > threshold) {
       std::cout << "ALERT: co2 reading " << r.value << " " << r.unit

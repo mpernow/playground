@@ -3,6 +3,8 @@
 #include <iostream>
 #include <sstream>
 
+namespace design_patterns::strategy {
+
 namespace {
 std::string format_value(double value) {
   std::ostringstream out;
@@ -51,3 +53,5 @@ void RuleBasedAlerter::on_reading(const Reading &r) {
               << " = " << r.value << " " << r.unit << '\n';
   }
 }
+
+} // namespace design_patterns::strategy

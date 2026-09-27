@@ -8,6 +8,8 @@
 
 #include "../reading.hpp"
 
+namespace design_patterns::factory {
+
 class Sensor {
 public:
   virtual ~Sensor() = default;
@@ -35,3 +37,5 @@ template <typename T> struct SensorRegistrar {
                                  [] { return std::make_unique<T>(); });
   }
 };
+
+} // namespace design_patterns::factory

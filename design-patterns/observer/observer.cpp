@@ -3,6 +3,8 @@
 #include <iostream>
 #include <utility>
 
+namespace design_patterns::observer {
+
 void SensorHub::subscribe(std::weak_ptr<Observer> obs) {
   observers_.push_back(std::move(obs));
 }
@@ -41,3 +43,5 @@ void ThresholdAlerter::on_reading(const Reading &r) {
     }
   }
 }
+
+} // namespace design_patterns::observer

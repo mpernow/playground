@@ -6,6 +6,8 @@
 
 #include "../reading.hpp"
 
+namespace design_patterns::observer {
+
 class Observer {
 public:
   virtual ~Observer() = default;
@@ -53,3 +55,5 @@ public:
 private:
   double threshold_;
 };
+
+} // namespace design_patterns::observer

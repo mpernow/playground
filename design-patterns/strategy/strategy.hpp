@@ -7,6 +7,8 @@
 #include <optional>
 #include <string>
 
+namespace design_patterns::strategy {
+
 class AlertRule {
 public:
   virtual ~AlertRule() = default;
@@ -38,7 +40,7 @@ private:
 };
 
 // Use the Strategy pattern to build rule based alerters
-class RuleBasedAlerter : public Observer {
+class RuleBasedAlerter : public design_patterns::observer::Observer {
 public:
   explicit RuleBasedAlerter(std::unique_ptr<AlertRule> rule);
 
@@ -47,3 +49,5 @@ public:
 private:
   std::unique_ptr<AlertRule> rule_;
 };
+
+} // namespace design_patterns::strategy

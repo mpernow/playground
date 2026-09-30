@@ -39,16 +39,31 @@ consecutive readings.
   — `AlertRule`, `ThresholdRule`, `RateOfChangeRule`, `RuleBasedAlerter`
 - [strategy_demo.cpp](strategy/strategy_demo.cpp) — strategy on its own
 
+## Decorator
+
+In the `decorator` directory.
+
+`DashboardDecorator` wraps an inner `Observer` and is itself an `Observer`, so
+decorators stack: `TimestampedDashboard` prefixes a running reading count,
+`RateLimitedDashboard` only forwards every Nth reading. Neither knows about
+the other or about the `ConsoleDashboard` at the bottom of the stack.
+
+- [decorator.hpp](decorator/decorator.hpp) / [decorator.cpp](decorator/decorator.cpp)
+  — `DashboardDecorator`, `TimestampedDashboard`, `RateLimitedDashboard`
+- [decorator_demo.cpp](decorator/decorator_demo.cpp) — decorator on its own
+
 ## Integrated
 
 - [aurora.cpp](aurora.cpp) — factory-built sensors feeding a `SensorHub`
   whose alerting is Strategy-based (`RuleBasedAlerter` with `ThresholdRule`
-  and `RateOfChangeRule`); the plain `ThresholdAlerter` and the functional
-  hub are demonstrated in `observer_demo.cpp` instead
-- [reading.hpp](reading.hpp) — the `Reading` value type shared by all three
+  and `RateOfChangeRule`) and whose dashboard is a stack of Decorators
+  (`RateLimitedDashboard` around `TimestampedDashboard` around
+  `ConsoleDashboard`); the plain `ThresholdAlerter` and the functional hub
+  are demonstrated in `observer_demo.cpp` instead
+- [reading.hpp](reading.hpp) — the `Reading` value type shared by all four
   patterns
 
 ## Building
 
 [Makefile](Makefile) — `make` builds `factory_demo`, `observer_demo`,
-`strategy_demo` and `aurora`.
+`strategy_demo`, `decorator_demo` and `aurora`.

@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "decorator/decorator.hpp"
 #include "factory/factory.hpp"
 #include "observer/observer.hpp"
 #include "strategy/strategy.hpp"
@@ -21,6 +22,14 @@ int main() {
   design_patterns::observer::SensorHub hub;
   auto dashboard =
       std::make_shared<design_patterns::observer::ConsoleDashboard>();
+  auto timestamp_dashboard =
+      std::make_shared<design_patterns::decorator::TimestampedDashboard>(
+          dashboard);
+  auto rate_limiting_dashboard =
+      std::make_shared<design_patterns::decorator::RateLimitedDashboard>(
+          timestamp_dashboard, 3);
+  hub.subscribe(rate_limiting_dashboard);
+
   // Both alerters can be created using the same type of Observer
   auto threshold_alerter =
       std::make_shared<design_patterns::strategy::RuleBasedAlerter>(
@@ -28,7 +37,6 @@ int main() {
   auto rate_of_change_alerter =
       std::make_shared<design_patterns::strategy::RuleBasedAlerter>(
           std::move(rate_of_change_rule));
-  hub.subscribe(dashboard);
   hub.subscribe(threshold_alerter);
   hub.subscribe(rate_of_change_alerter);
 

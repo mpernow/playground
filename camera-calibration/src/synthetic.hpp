@@ -25,6 +25,6 @@ struct BoardView {
 // Random views of the board where every corner lands inside the image
 std::vector<BoardView> generateViews(const Intrinsics &A, cv::Size imageSize,
                                      const Board &board, int count,
-                                     unsigned seed);
+                                     unsigned seed, double noiseStd = 0.0);
 
 } // namespace calib

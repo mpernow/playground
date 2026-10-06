@@ -14,7 +14,7 @@ static const Board kBoard{9, 6, 24.0};
 int main() {
   auto objectPts = boardObjectPoints(kBoard);
   auto views = generateViews(kTrueIntrinsics, kImageSize, kBoard, 15,
-                             /*seed=*/42);
+                             /*seed=*/42, 0.0);
   std::cout << "Generated " << views.size() << " views of a " << kBoard.cols
             << "x" << kBoard.rows << " board.\n\n";
 

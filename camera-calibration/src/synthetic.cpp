@@ -21,12 +21,14 @@ std::vector<cv::Point2d> boardObjectPoints(const Board &board) {
 
 std::vector<BoardView> generateViews(const Intrinsics &A, cv::Size imageSize,
                                      const Board &board, int count,
-                                     unsigned seed) {
+                                     unsigned seed, double noiseStd) {
   std::mt19937 rng(seed);
   std::uniform_real_distribution<double> tiltDeg(15.0, 45.0);
   std::uniform_real_distribution<double> axisComponent(-1.0, 1.0);
   std::uniform_real_distribution<double> depthMm(500.0, 900.0);
   std::uniform_real_distribution<double> lateralMm(-150.0, 150.0);
+
+  std::normal_distribution<double> noise(0.0, noiseStd);
 
   auto objectPoints = boardObjectPoints(board);
   std::vector<BoardView> views;
@@ -54,7 +56,8 @@ std::vector<BoardView> generateViews(const Intrinsics &A, cv::Size imageSize,
         inBounds = false;
         break;
       }
-      imgPts.push_back(p);
+      cv::Point2d pNoisy = {p.x + noise(rng), p.y + noise(rng)};
+      imgPts.push_back(pNoisy);
     }
     if (!inBounds)
       continue;

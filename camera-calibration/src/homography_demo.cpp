@@ -12,17 +12,18 @@ static const cv::Size kImageSize(1280, 720);
 static const Board kBoard{9, 6, 24.0};
 
 int main() {
-  auto objectPts = boardObjectPoints(kBoard);
-  auto views = generateViews(kTrueIntrinsics, kImageSize, kBoard, 15,
-                             /*seed=*/42, 0.0);
+  int minVisible = 20;
+  auto views =
+      generateViews(kTrueIntrinsics, kImageSize, kBoard, 15, minVisible,
+                    /*seed=*/42, 0.0);
   std::cout << "Generated " << views.size() << " views of a " << kBoard.cols
             << "x" << kBoard.rows << " board.\n\n";
 
   const BoardView &view0 = views[0];
-  cv::Matx33d Hdlt = estimateHomography(objectPts, view0.imagePoints);
+  cv::Matx33d Hdlt = estimateHomography(view0.objectPoints, view0.imagePoints);
 
   std::vector<cv::Point2f> objF, imgF;
-  for (const auto &p : objectPts) {
+  for (const auto &p : view0.objectPoints) {
     objF.emplace_back(p.x, p.y);
   }
   for (const auto &p : view0.imagePoints) {
@@ -34,9 +35,10 @@ int main() {
   std::cout << "cv::findHomography (view 0):\n"
             << Hcv / Hcv.at<double>(2, 2) << "\n\n";
 
-  double ourErr = reprojectionErrorPx(Hdlt, objectPts, view0.imagePoints);
-  double cvErr =
-      reprojectionErrorPx(cv::Matx33d(Hcv), objectPts, view0.imagePoints);
+  double ourErr =
+      reprojectionErrorPx(Hdlt, view0.objectPoints, view0.imagePoints);
+  double cvErr = reprojectionErrorPx(cv::Matx33d(Hcv), view0.objectPoints,
+                                     view0.imagePoints);
 
   std::cout << "Mean reprojection error, our DLT:      " << ourErr << " px\n";
   std::cout << "Mean reprojection error, cv::findHomography: " << cvErr

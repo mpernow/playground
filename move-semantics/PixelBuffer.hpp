@@ -18,6 +18,7 @@ public:
 
   static inline int copy_count = 0;
   static inline int move_count = 0;
+  static inline bool verbose = true;
 
 private:
   int width_ = 0;

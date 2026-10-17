@@ -6,9 +6,11 @@
 
 PixelBuffer::PixelBuffer(int width, int height)
     : width_(width), height_(height), pixels_(new std::uint8_t[byte_size()]{}) {
-  std::println("constructed {}x{} ({} bytes) at {}", width_, height_,
-               byte_size(), static_cast<void *>(pixels_));
-  std::fflush(stdout);
+  if (verbose) {
+    std::println("constructed {}x{} ({} bytes) at {}", width_, height_,
+                 byte_size(), static_cast<void *>(pixels_));
+    std::fflush(stdout);
+  }
 }
 
 PixelBuffer::PixelBuffer(const PixelBuffer &other)
@@ -54,9 +56,11 @@ PixelBuffer &PixelBuffer::operator=(PixelBuffer &&other) noexcept {
 }
 
 PixelBuffer::~PixelBuffer() {
-  std::println("destructing {}x{} at {}", width_, height_,
-               static_cast<void *>(pixels_));
-  std::fflush(stdout);
+  if (verbose) {
+    std::println("destructing {}x{} at {}", width_, height_,
+                 static_cast<void *>(pixels_));
+    std::fflush(stdout);
+  }
   delete[] pixels_;
 }
 

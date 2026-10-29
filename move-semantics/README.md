@@ -27,4 +27,12 @@ cmake --build build
 
 - [PixelBuffer.hpp](PixelBuffer.hpp) / [PixelBuffer.cpp](PixelBuffer.cpp) —
   `PixelBuffer`, an owning buffer with copy and move operations
-- [main.cpp](main.cpp) — constructs a buffer and copies it
+- [report.hpp](report.hpp) — `report()` resets the counters, runs one
+  experiment and prints its copy/move counts; `QuietLogs` mutes buffer logging
+- [demos.hpp](demos.hpp) — one function per demo
+- [basics.cpp](basics.cpp) — copy vs move, and timing both
+- [elision.cpp](elision.cpp) — guaranteed elision, NRVO, defeating NRVO and
+  `return std::move`
+- [forwarding.cpp](forwarding.cpp) — deduction and reference collapsing as
+  `static_assert`s, then `archive` with and without `std::forward`
+- [main.cpp](main.cpp) — runs every demo in order

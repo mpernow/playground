@@ -9,4 +9,5 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
-add_executable(main main.cpp PixelBuffer.cpp)
+add_executable(main main.cpp PixelBuffer.cpp basics.cpp elision.cpp forwarding.cpp)
+target_compile_options(main PRIVATE -Wall -Wextra)

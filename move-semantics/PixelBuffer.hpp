@@ -13,7 +13,7 @@ public:
   ~PixelBuffer();
 
   std::size_t byte_size() const;
-  void reset_counters();
+  static void reset_counters();
 
   bool empty() const;
 

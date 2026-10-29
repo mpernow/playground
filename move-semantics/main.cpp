@@ -26,6 +26,26 @@ PixelBuffer make_one_of_two(bool pick_first) {
   return second;
 }
 
+template <typename T> void archive(T &&buf, std::vector<PixelBuffer> &dest) {
+  dest.push_back(std::forward<T>(
+      buf)); // buf remains an rvalue reference due to perfect forwarding
+}
+
+template <typename T>
+void archive_broken(T &&buf, std::vector<PixelBuffer> &dest) {
+  dest.push_back(buf); // buf is a named variable -> always an lvalue here
+}
+
+template <typename... Args> PixelBuffer make_buffer(Args &&...args) {
+  return PixelBuffer(std::forward<Args>(args)...);
+}
+
+template <typename T> constexpr bool deduces_as_lvalue_ref(T &&) {
+  return std::is_lvalue_reference_v<T &&>;
+}
+
+template <typename T> void const_rref(const T &&x) { (void)x; }
+
 int main() {
   {
     std::println("Scope 1: Checking copy constructor");
@@ -34,6 +54,7 @@ int main() {
 
     std::println("About to leave scope 1");
     std::fflush(stdout);
+    a.reset_counters();
   }
 
   {
@@ -52,6 +73,7 @@ int main() {
     std::println("About to leave scope 2"); // Destructs in reverse order: first
                                             // moved-to, then copied-to, finally
                                             // the moved-from already nullptr
+    frame.reset_counters();
   }
 
   {
@@ -82,6 +104,7 @@ int main() {
     std::println("Copy count: {}, move count: {}", src2.copy_count,
                  src2.move_count);
     std::println("About to leave scope 3");
+    src.reset_counters();
   }
 
   {
@@ -91,6 +114,12 @@ int main() {
     std::println("Copy count: {}, move "
                  "count: {}",
                  a.copy_count, a.move_count);
+    PixelBuffer b = make_buffer(1920, 1080);
+    std::println("After variadic argument forwarding:");
+    std::println("Copy count: {}, move "
+                 "count: {}",
+                 b.copy_count, b.move_count);
+    a.reset_counters();
   }
 
   {
@@ -100,6 +129,7 @@ int main() {
     std::println("Copy count: {}, move "
                  "count: {}",
                  a.copy_count, a.move_count);
+    a.reset_counters();
   }
 
   {
@@ -109,5 +139,37 @@ int main() {
     std::println("Copy count: {}, move "
                  "count: {}",
                  a.copy_count, a.move_count);
+    a.reset_counters();
+  }
+
+  {
+    std::println("");
+    std::println("Scope 7: Forwarding references");
+    int lv = 0;
+    static_assert(deduces_as_lvalue_ref(lv) ==
+                  true); // lvalue arg -> T=int&, T&&=int& && = int& (collapsed)
+    static_assert(deduces_as_lvalue_ref(0) ==
+                  false); // rvalue arg -> T=int, T&&=int&&
+                          // Collapsing rules with a template argument:
+                          // T& & -> T&
+                          // T& && -> T&
+                          // T&& & -> T&
+                          // T&& && -> T&
+
+    // Compiler error: No collapsing for const-qualified types
+    // const_rref(lv);
+
+    PixelBuffer tmp(1920, 1080);
+    std::vector<PixelBuffer> store;
+    archive_broken(PixelBuffer(1920, 1080), store);
+    std::println("archive_broken(rvalue arg): Copy count: {}, move count: {}",
+                 tmp.copy_count, tmp.move_count);
+    archive(PixelBuffer(1920, 1080), store);
+    std::println("archive(rvalue arg): Copy count: {}, move count: {}",
+                 tmp.copy_count, tmp.move_count);
+    archive(tmp, store);
+    std::println("archive(lvalue arg): Copy count: {}, move count: {}",
+                 tmp.copy_count, tmp.move_count);
+    tmp.reset_counters();
   }
 }

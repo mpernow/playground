@@ -68,4 +68,9 @@ std::size_t PixelBuffer::byte_size() const {
   return static_cast<std::size_t>(width_) * height_ * 4;
 }
 
+void PixelBuffer::reset_counters() {
+  copy_count = 0;
+  move_count = 0;
+}
+
 bool PixelBuffer::empty() const { return pixels_ == nullptr; }
